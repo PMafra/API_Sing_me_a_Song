@@ -7,7 +7,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.post('/recommendations', recommendationController.addRecommendation);
+app.post('/recommendations', recommendationController.addNewRecommendation);
 
 app.use(serverMiddlewareError);
 

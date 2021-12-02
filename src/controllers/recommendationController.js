@@ -3,15 +3,19 @@
 /* eslint-disable import/prefer-default-export */
 import * as recommendationService from '../services/recommendationService.js';
 
-async function addRecommendation(req, res) {
+const addNewRecommendation = async (req, res, next) => {
+  const { name, youtubeLink: link } = req.body;
+
   try {
+    await recommendationService.insertRecommendation({ name, link });
+
     return res.sendStatus(201);
   } catch (err) {
     console.log(err);
-    return res.sendStatus(500);
+    return next();
   }
-}
+};
 
 export {
-  addRecommendation,
+  addNewRecommendation,
 };
