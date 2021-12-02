@@ -2,11 +2,14 @@
 /* eslint-disable no-console */
 /* eslint-disable import/prefer-default-export */
 import * as recommendationService from '../services/recommendationService.js';
+import RequestError from '../errors/requestError.js';
 
 const addNewRecommendation = async (req, res, next) => {
-  const { name, youtubeLink: link } = req.body;
-
   try {
+    await recommendationService.validateRecommendationBody(req.body);
+
+    const { name, youtubeLink: link } = req.body;
+
     const addNewSong = await recommendationService.insertRecommendation({ name, link });
 
     if (addNewSong === 'addedPoint') {
@@ -14,6 +17,9 @@ const addNewRecommendation = async (req, res, next) => {
     }
     return res.sendStatus(201);
   } catch (err) {
+    if (err instanceof RequestError) {
+      return res.status(400).send(err.message);
+    }
     console.log(err);
     return next();
   }
