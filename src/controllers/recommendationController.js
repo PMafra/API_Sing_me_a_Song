@@ -3,6 +3,7 @@
 /* eslint-disable import/prefer-default-export */
 import * as recommendationService from '../services/recommendationService.js';
 import RequestError from '../errors/requestError.js';
+import NotFoundError from '../errors/notFoundError.js';
 
 const addNewRecommendation = async (req, res, next) => {
   try {
@@ -20,11 +21,30 @@ const addNewRecommendation = async (req, res, next) => {
     if (err instanceof RequestError) {
       return res.status(400).send(err.message);
     }
-    console.log(err);
+    return next();
+  }
+};
+
+const upvoteRecommendation = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    if (!Number(id)) {
+      return res.sendStatus(400);
+    }
+
+    await recommendationService.increaseScore({ id });
+
+    return res.sendStatus(201);
+  } catch (err) {
+    if (err instanceof NotFoundError) {
+      return res.sendStatus(404);
+    }
     return next();
   }
 };
 
 export {
   addNewRecommendation,
+  upvoteRecommendation,
 };
