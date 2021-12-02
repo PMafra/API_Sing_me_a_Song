@@ -6,7 +6,8 @@ const insertRecommendation = async ({ name, link }) => {
   const isAlreadyRecommended = await recommendationRepository.selectRecommendation({ name });
 
   if (isAlreadyRecommended) {
-    return console.log('Add point to score');
+    await recommendationRepository.updateScore({ name, type: 'upvote' });
+    return 'addedPoint';
   }
 
   return recommendationRepository.insertRecommendation({ name, link });

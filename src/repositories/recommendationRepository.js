@@ -17,7 +17,23 @@ const selectRecommendation = async ({ name }) => {
   return result.rows[0];
 };
 
+const updateScore = async ({ name, type }) => {
+  let upOrdown;
+  if (type === 'upvote') {
+    upOrdown = '+';
+  }
+  if (type === 'downvote') {
+    upOrdown = '-';
+  }
+  const result = await connection.query(
+    `UPDATE "songs" SET score = score ${upOrdown} 1 WHERE name = $1`,
+    [name],
+  );
+  return result;
+};
+
 export {
   insertRecommendation,
   selectRecommendation,
+  updateScore,
 };
