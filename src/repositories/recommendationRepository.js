@@ -3,7 +3,7 @@ import connection from '../database/database.js';
 
 const insertRecommendation = async ({ name, link }) => {
   const result = await connection.query(
-    'INSERT INTO "songs" (name, link, score) VALUES ($1, $2, $3)',
+    'INSERT INTO "songs" (name, link, score) VALUES ($1, $2, $3);',
     [name, link, 1],
   );
   return result;
@@ -11,13 +11,13 @@ const insertRecommendation = async ({ name, link }) => {
 
 const selectRecommendation = async ({ name }) => {
   const result = await connection.query(
-    'SELECT * FROM "songs" WHERE name ILIKE $1',
+    'SELECT * FROM "songs" WHERE name ILIKE $1;',
     [name],
   );
   return result.rows[0];
 };
 
-const updateScore = async ({ name, type }) => {
+const updateScore = async ({ id, type }) => {
   let upOrdown;
   if (type === 'upvote') {
     upOrdown = '+';
@@ -26,10 +26,11 @@ const updateScore = async ({ name, type }) => {
     upOrdown = '-';
   }
   const result = await connection.query(
-    `UPDATE "songs" SET score = score ${upOrdown} 1 WHERE name = $1`,
-    [name],
+    `UPDATE "songs" SET score = score ${upOrdown} 1 WHERE id = $1 RETURNING songs.score;`,
+    [id],
   );
-  return result;
+
+  return result.rows[0];
 };
 
 export {
