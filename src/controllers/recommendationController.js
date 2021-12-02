@@ -21,7 +21,7 @@ const addNewRecommendation = async (req, res, next) => {
     if (err instanceof RequestError) {
       return res.status(400).send(err.message);
     }
-    return next();
+    return next(err);
   }
 };
 
@@ -40,7 +40,7 @@ const upvoteRecommendation = async (req, res, next) => {
     if (err instanceof NotFoundError) {
       return res.sendStatus(404);
     }
-    return next();
+    return next(err);
   }
 };
 
