@@ -48,10 +48,28 @@ const selectAll = async () => {
   return result.rows;
 };
 
+const selectRandom = async ({ filter }) => {
+  let filterQuery = '';
+
+  if (filter === 70) {
+    filterQuery = 'score > 10';
+  }
+  if (filter === 30) {
+    filterQuery = 'score BETWEEN 5 AND 10';
+  }
+
+  const result = await connection.query(
+    `SELECT * FROM "songs" WHERE ${filterQuery};`,
+  );
+
+  return result.rows;
+};
+
 export {
   insertRecommendation,
   selectRecommendation,
   updateScore,
   deleteRecommendation,
   selectAll,
+  selectRandom,
 };
