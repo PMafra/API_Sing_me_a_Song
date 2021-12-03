@@ -10,6 +10,7 @@ app.use(express.json());
 app.post('/recommendations', recommendationController.addNewRecommendation);
 app.post('/recommendations/:id/upvote', recommendationController.upvoteRecommendation);
 app.post('/recommendations/:id/downvote', recommendationController.downvoteRecommendation);
+app.get('/recommendations/random', recommendationController.obtainRandomRecommendations);
 
 app.use(serverMiddlewareError);
 

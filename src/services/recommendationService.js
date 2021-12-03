@@ -1,3 +1,5 @@
+/* eslint-disable consistent-return */
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 /* eslint-disable import/prefer-default-export */
 import { validateUrl } from 'youtube-validate';
@@ -50,9 +52,37 @@ const decreaseScore = async ({ id }) => {
   return true;
 };
 
+const getRandomRecommendations = async () => {
+  let filter;
+  let notAllLessThan10;
+  const allRecommendations = await recommendationRepository.selectAll();
+  if (allRecommendations.length === 0) {
+    throw new NotFoundError();
+  }
+  const notAllGreaterThan10 = allRecommendations.find((song) => song.score <= 10);
+
+  if (notAllGreaterThan10) {
+    notAllLessThan10 = allRecommendations.find((song) => song.score > 10);
+  }
+
+  if (notAllLessThan10) {
+    const randomNumber = Math.random();
+    if (randomNumber < 0.7) {
+      filter = 70;
+    }
+    if (randomNumber >= 0.7) {
+      filter = 30;
+    }
+  }
+
+  const recommendations = await recommendationRepository.selectRandom({ filter });
+  return recommendations;
+};
+
 export {
   insertRecommendation,
   validateRecommendationBody,
   increaseScore,
   decreaseScore,
+  getRandomRecommendations,
 };

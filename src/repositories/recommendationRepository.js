@@ -41,9 +41,35 @@ const deleteRecommendation = async ({ id }) => {
   return result;
 };
 
+const selectAll = async () => {
+  const result = await connection.query(
+    'SELECT * FROM "songs";',
+  );
+  return result.rows;
+};
+
+const selectRandom = async ({ filter }) => {
+  let filterQuery = '';
+
+  if (filter === 70) {
+    filterQuery = ' WHERE score > 10';
+  }
+  if (filter === 30) {
+    filterQuery = ' WHERE score BETWEEN -5 AND 10';
+  }
+
+  const result = await connection.query(
+    `SELECT * FROM "songs"${filterQuery} ORDER BY random() LIMIT 1;`,
+  );
+
+  return result.rows[0];
+};
+
 export {
   insertRecommendation,
   selectRecommendation,
   updateScore,
   deleteRecommendation,
+  selectAll,
+  selectRandom,
 };

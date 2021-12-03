@@ -67,8 +67,22 @@ const downvoteRecommendation = async (req, res, next) => {
   }
 };
 
+const obtainRandomRecommendations = async (req, res, next) => {
+  try {
+    const randomRecommendations = await recommendationService.getRandomRecommendations();
+
+    return res.send(randomRecommendations);
+  } catch (err) {
+    if (err instanceof NotFoundError) {
+      return res.sendStatus(404);
+    }
+    return next(err);
+  }
+};
+
 export {
   addNewRecommendation,
   upvoteRecommendation,
   downvoteRecommendation,
+  obtainRandomRecommendations,
 };
