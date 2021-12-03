@@ -65,6 +65,16 @@ const selectRandom = async ({ filter }) => {
   return result.rows[0];
 };
 
+const selectTop = async ({ amount }) => {
+  console.log('result');
+  const result = await connection.query(
+    'SELECT * FROM "songs" ORDER BY score DESC LIMIT $1;',
+    [amount],
+  );
+
+  return result.rows;
+};
+
 export {
   insertRecommendation,
   selectRecommendation,
@@ -72,4 +82,5 @@ export {
   deleteRecommendation,
   selectAll,
   selectRandom,
+  selectTop,
 };
