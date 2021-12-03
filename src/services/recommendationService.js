@@ -79,10 +79,23 @@ const getRandomRecommendations = async () => {
   return recommendations;
 };
 
+const getTopRecommendations = async ({ amount }) => {
+  console.log('result');
+
+  const topRecommendations = await recommendationRepository.selectTop({ amount });
+
+  if (topRecommendations.length === 0) {
+    throw new NotFoundError();
+  }
+
+  return topRecommendations;
+};
+
 export {
   insertRecommendation,
   validateRecommendationBody,
   increaseScore,
   decreaseScore,
   getRandomRecommendations,
+  getTopRecommendations,
 };

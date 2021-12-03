@@ -80,9 +80,29 @@ const obtainRandomRecommendations = async (req, res, next) => {
   }
 };
 
+const obtainTopRecommendations = async (req, res, next) => {
+  try {
+    const { amount } = req.params;
+
+    if (!Number(amount)) {
+      return res.sendStatus(400);
+    }
+
+    const topRecommendations = await recommendationService.getTopRecommendations({ amount });
+
+    return res.send(topRecommendations);
+  } catch (err) {
+    if (err instanceof NotFoundError) {
+      return res.sendStatus(404);
+    }
+    return next(err);
+  }
+};
+
 export {
   addNewRecommendation,
   upvoteRecommendation,
   downvoteRecommendation,
   obtainRandomRecommendations,
+  obtainTopRecommendations,
 };
