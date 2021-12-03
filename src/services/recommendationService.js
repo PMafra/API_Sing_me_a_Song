@@ -37,8 +37,17 @@ const increaseScore = async ({ id }) => {
   return true;
 };
 
+const decreaseScore = async ({ id }) => {
+  const donwvote = await recommendationRepository.updateScore({ id, type: 'downvote' });
+  if (!donwvote) {
+    throw new NotFoundError();
+  }
+  return true;
+};
+
 export {
   insertRecommendation,
   validateRecommendationBody,
   increaseScore,
+  decreaseScore,
 };
