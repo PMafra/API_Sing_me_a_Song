@@ -21,7 +21,7 @@ const addNewRecommendation = async (req, res, next) => {
     if (err instanceof RequestError) {
       return res.status(400).send(err.message);
     }
-    return next();
+    return next(err);
   }
 };
 
@@ -40,11 +40,35 @@ const upvoteRecommendation = async (req, res, next) => {
     if (err instanceof NotFoundError) {
       return res.sendStatus(404);
     }
-    return next();
+    return next(err);
+  }
+};
+
+const downvoteRecommendation = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    if (!Number(id)) {
+      return res.sendStatus(400);
+    }
+
+    const decrease = await recommendationService.decreaseScore({ id });
+
+    if (decrease === 'deleted') {
+      return res.status(201).send('Recommendation deleted');
+    }
+
+    return res.sendStatus(201);
+  } catch (err) {
+    if (err instanceof NotFoundError) {
+      return res.sendStatus(404);
+    }
+    return next(err);
   }
 };
 
 export {
   addNewRecommendation,
   upvoteRecommendation,
+  downvoteRecommendation,
 };
