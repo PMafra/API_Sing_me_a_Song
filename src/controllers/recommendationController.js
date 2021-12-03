@@ -73,6 +73,9 @@ const obtainRandomRecommendations = async (req, res, next) => {
 
     return res.send(randomRecommendations);
   } catch (err) {
+    if (err instanceof NotFoundError) {
+      return res.sendStatus(404);
+    }
     return next(err);
   }
 };

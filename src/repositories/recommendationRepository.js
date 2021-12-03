@@ -52,17 +52,17 @@ const selectRandom = async ({ filter }) => {
   let filterQuery = '';
 
   if (filter === 70) {
-    filterQuery = 'score > 10';
+    filterQuery = ' WHERE score > 10';
   }
   if (filter === 30) {
-    filterQuery = 'score BETWEEN 5 AND 10';
+    filterQuery = ' WHERE score BETWEEN -5 AND 10';
   }
 
   const result = await connection.query(
-    `SELECT * FROM "songs" WHERE ${filterQuery};`,
+    `SELECT * FROM "songs"${filterQuery} ORDER BY random() LIMIT 1;`,
   );
 
-  return result.rows;
+  return result.rows[0];
 };
 
 export {
