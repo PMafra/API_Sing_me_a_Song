@@ -41,9 +41,17 @@ const deleteRecommendation = async ({ id }) => {
   return result;
 };
 
+const selectAll = async () => {
+  const result = await connection.query(
+    'SELECT * FROM "songs";',
+  );
+  return result.rows;
+};
+
 export {
   insertRecommendation,
   selectRecommendation,
   updateScore,
   deleteRecommendation,
+  selectAll,
 };

@@ -50,9 +50,16 @@ const decreaseScore = async ({ id }) => {
   return true;
 };
 
+const getRandomRecommendations = async () => {
+  const recommendations = await recommendationRepository.selectAll();
+
+  return recommendations;
+};
+
 export {
   insertRecommendation,
   validateRecommendationBody,
   increaseScore,
   decreaseScore,
+  getRandomRecommendations,
 };
