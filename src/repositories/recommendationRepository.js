@@ -33,8 +33,17 @@ const updateScore = async ({ id, type }) => {
   return result.rows[0];
 };
 
+const deleteRecommendation = async ({ id }) => {
+  const result = await connection.query(
+    'DELETE FROM "songs" WHERE id = $1;',
+    [id],
+  );
+  return result;
+};
+
 export {
   insertRecommendation,
   selectRecommendation,
   updateScore,
+  deleteRecommendation,
 };

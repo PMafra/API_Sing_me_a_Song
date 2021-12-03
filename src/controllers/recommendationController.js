@@ -52,7 +52,11 @@ const downvoteRecommendation = async (req, res, next) => {
       return res.sendStatus(400);
     }
 
-    await recommendationService.decreaseScore({ id });
+    const decrease = await recommendationService.decreaseScore({ id });
+
+    if (decrease === 'deleted') {
+      return res.status(201).send('Recommendation deleted');
+    }
 
     return res.sendStatus(201);
   } catch (err) {

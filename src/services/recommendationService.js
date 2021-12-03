@@ -38,10 +38,15 @@ const increaseScore = async ({ id }) => {
 };
 
 const decreaseScore = async ({ id }) => {
-  const donwvote = await recommendationRepository.updateScore({ id, type: 'downvote' });
-  if (!donwvote) {
+  const downvote = await recommendationRepository.updateScore({ id, type: 'downvote' });
+  if (!downvote) {
     throw new NotFoundError();
   }
+  if (downvote.score < -5) {
+    await recommendationRepository.deleteRecommendation({ id });
+    return 'deleted';
+  }
+
   return true;
 };
 
