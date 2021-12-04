@@ -18,6 +18,8 @@ const validateRecommendationBody = async (objectBody) => {
     .then(() => true).catch((err) => {
       throw new RequestError(err);
     });
+
+  return true;
 };
 
 const insertRecommendation = async ({ name, youtubeLink }) => {

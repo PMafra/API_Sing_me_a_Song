@@ -1,11 +1,51 @@
+import { validateUrl } from 'youtube-validate';
 import * as recommendationRepository from '../../src/repositories/recommendationRepository.js';
 import * as recommendationService from '../../src/services/recommendationService.js';
+import recommendationSchema from '../../src/validations/recommendationSchema.js';
 import NotFoundError from '../../src/errors/notFoundError.js';
+import RequestError from '../../src/errors/requestError.js';
 
 const sut = recommendationService;
 jest.mock('youtube-validate');
 
 describe('Recommendation service test', () => {
+  it('Should return Request Error for not valid body', async () => {
+    jest.spyOn(recommendationSchema, 'validate').mockImplementationOnce(() => ({
+      error: {
+        details: [{
+          message: 'error message',
+        }],
+      },
+    }));
+
+    const promise = sut.validateRecommendationBody();
+    await expect(promise).rejects.toThrowError(RequestError);
+  });
+
+  it('Should return Request Error for not valid url', async () => {
+    jest.spyOn(recommendationSchema, 'validate').mockImplementationOnce(() => ({
+      error: false,
+    }));
+    validateUrl.mockRejectedValue(() => 'err');
+    const promise = sut.validateRecommendationBody({
+      name: 'avenged',
+      youtubeLink: 'https://www.youtube.com/watch?v=chwyjJbcs1Y',
+    });
+    await expect(promise).rejects.toThrowError(RequestError);
+  });
+
+  it('Should return true for valid body', async () => {
+    jest.spyOn(recommendationSchema, 'validate').mockImplementationOnce(() => ({
+      error: false,
+    }));
+    validateUrl.mockResolvedValue(() => true);
+    const result = await sut.validateRecommendationBody({
+      name: 'avenged',
+      youtubeLink: 'https://www.youtube.com/watch?v=chwyjJbcs1Y',
+    });
+    expect(result).toEqual(true);
+  });
+
   it('Should return "addedPoint" for recommendation already existing', async () => {
     const mockRecommendationObject = {
       name: 'Falamansa - Xote dos Milagres',
