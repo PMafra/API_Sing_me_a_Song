@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
 import connection from '../database/database.js';
 
-const insertRecommendation = async ({ name, link }) => {
+const insertRecommendation = async ({ name, youtubeLink }) => {
   const result = await connection.query(
-    'INSERT INTO "songs" (name, link, score) VALUES ($1, $2, $3);',
-    [name, link, 1],
+    'INSERT INTO "songs" (name, "youtubeLink", score) VALUES ($1, $2, $3);',
+    [name, youtubeLink, 1],
   );
   return result;
 };

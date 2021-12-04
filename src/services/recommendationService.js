@@ -18,17 +18,20 @@ const validateRecommendationBody = async (objectBody) => {
     .then(() => true).catch((err) => {
       throw new RequestError(err);
     });
+
+  return true;
 };
 
-const insertRecommendation = async ({ name, link }) => {
+const insertRecommendation = async ({ name, youtubeLink }) => {
   const isAlreadyRecommended = await recommendationRepository.selectRecommendation({ name });
-
+  console.log(isAlreadyRecommended);
   if (isAlreadyRecommended) {
     await recommendationRepository.updateScore({ id: isAlreadyRecommended.id, type: 'upvote' });
     return 'addedPoint';
   }
 
-  return recommendationRepository.insertRecommendation({ name, link });
+  await recommendationRepository.insertRecommendation({ name, youtubeLink });
+  return true;
 };
 
 const increaseScore = async ({ id }) => {
@@ -80,8 +83,6 @@ const getRandomRecommendations = async () => {
 };
 
 const getTopRecommendations = async ({ amount }) => {
-  console.log('result');
-
   const topRecommendations = await recommendationRepository.selectTop({ amount });
 
   if (topRecommendations.length === 0) {
