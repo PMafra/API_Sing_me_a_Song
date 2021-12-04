@@ -3,7 +3,7 @@
 /* eslint-disable import/prefer-default-export */
 import faker from 'faker';
 
-const createRecomendations = (length, score, isBody) => {
+const createRecomendations = ({ length, score, isBody }) => {
   if (isBody) {
     return {
       name: `${faker.name.findName()} - ${faker.name.findName()}`,

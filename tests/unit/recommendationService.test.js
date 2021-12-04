@@ -10,7 +10,9 @@ import * as recommendationFactory from '../factories/recommendationFactory.js';
 const sut = recommendationService;
 jest.mock('youtube-validate');
 
-const mockRecommendationObject = recommendationFactory.createRecomendations(null, null, true);
+const mockRecommendationObject = recommendationFactory.createRecomendations(
+  { length: null, score: null, isBody: true },
+);
 
 const mockVoteId = {
   id: 1,
@@ -130,7 +132,7 @@ describe('Recommendation service test', () => {
     jest.spyOn(recommendationRepository, 'selectAll').mockImplementationOnce(() => ['filled']);
     jest.spyOn(Math, 'random').mockReturnValueOnce(() => 0.6);
     jest.spyOn(recommendationRepository, 'selectRandom').mockImplementationOnce(() => (
-      recommendationFactory.createRecomendations(1, 13)
+      recommendationFactory.createRecomendations({ length: 1, score: 13, isBody: false })
     ));
 
     const result = await sut.getRandomRecommendations();
@@ -149,7 +151,7 @@ describe('Recommendation service test', () => {
     jest.spyOn(recommendationRepository, 'selectAll').mockImplementationOnce(() => ['filled']);
     jest.spyOn(Math, 'random').mockReturnValueOnce(() => 0.8);
     jest.spyOn(recommendationRepository, 'selectRandom').mockImplementationOnce(() => (
-      recommendationFactory.createRecomendations(1, 5)
+      recommendationFactory.createRecomendations({ length: 1, score: 5, isBody: false })
     ));
 
     const result = await sut.getRandomRecommendations();
@@ -168,7 +170,7 @@ describe('Recommendation service test', () => {
   it('Should return any recommendation', async () => {
     jest.spyOn(recommendationRepository, 'selectAll').mockImplementationOnce(() => ['filled']);
     jest.spyOn(recommendationRepository, 'selectRandom').mockImplementationOnce(() => (
-      recommendationFactory.createRecomendations(1, 5)
+      recommendationFactory.createRecomendations({ length: 1, score: 5, isBody: false })
     ));
 
     const result = await sut.getRandomRecommendations();
@@ -196,7 +198,7 @@ describe('Recommendation service test', () => {
       amount: 3,
     };
     jest.spyOn(recommendationRepository, 'selectTop').mockImplementationOnce(() => (
-      recommendationFactory.createRecomendations(3)
+      recommendationFactory.createRecomendations({ length: 3, score: null, isBody: false })
     ));
 
     const result = await sut.getTopRecommendations(mockAmount);
