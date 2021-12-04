@@ -24,7 +24,7 @@ const validateRecommendationBody = async (objectBody) => {
 
 const insertRecommendation = async ({ name, youtubeLink }) => {
   const isAlreadyRecommended = await recommendationRepository.selectRecommendation({ name });
-
+  console.log(isAlreadyRecommended);
   if (isAlreadyRecommended) {
     await recommendationRepository.updateScore({ id: isAlreadyRecommended.id, type: 'upvote' });
     return 'addedPoint';
