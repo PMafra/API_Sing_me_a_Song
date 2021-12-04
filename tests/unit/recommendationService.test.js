@@ -151,4 +151,46 @@ describe('Recommendation service test', () => {
       score: 5,
     });
   });
+
+  it('Should return Not Found Error for no recommendations found', async () => {
+    jest.spyOn(recommendationRepository, 'selectTop').mockImplementationOnce(() => []);
+
+    const promise = sut.getTopRecommendations({ amount: 2 });
+    await expect(promise).rejects.toThrowError(NotFoundError);
+  });
+
+  it('Should return top recommendations list ordered by descending score points', async () => {
+    jest.spyOn(recommendationRepository, 'selectTop').mockImplementationOnce(() => (
+      [
+        {
+          id: 13,
+          name: 'alok',
+          youtubeLink: 'https://www.youtube.com/watch?v=chwyjJbcs1Y',
+          score: 13,
+        },
+        {
+          id: 14,
+          name: 'avenged',
+          youtubeLink: 'https://www.youtube.com/watch?v=chwyjJbcs1Y',
+          score: 5,
+        },
+      ]
+    ));
+
+    const result = await sut.getTopRecommendations({ amount: 2 });
+    expect(result).toEqual([
+      {
+        id: 13,
+        name: 'alok',
+        youtubeLink: 'https://www.youtube.com/watch?v=chwyjJbcs1Y',
+        score: 13,
+      },
+      {
+        id: 14,
+        name: 'avenged',
+        youtubeLink: 'https://www.youtube.com/watch?v=chwyjJbcs1Y',
+        score: 5,
+      },
+    ]);
+  });
 });
