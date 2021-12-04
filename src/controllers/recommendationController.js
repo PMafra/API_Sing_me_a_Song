@@ -9,9 +9,9 @@ const addNewRecommendation = async (req, res, next) => {
   try {
     await recommendationService.validateRecommendationBody(req.body);
 
-    const { name, youtubeLink: link } = req.body;
+    const { name, youtubeLink } = req.body;
 
-    const addNewSong = await recommendationService.insertRecommendation({ name, link });
+    const addNewSong = await recommendationService.insertRecommendation({ name, youtubeLink });
 
     if (addNewSong === 'addedPoint') {
       return res.status(201).send('This recommendation already exists. A score point has been added to it.');

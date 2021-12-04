@@ -8,7 +8,7 @@ describe('Recommendation service test', () => {
   it('Should return "addedPoint" for recommendation already existing', async () => {
     const mockRecommendationBody = {
       name: 'Falamansa - Xote dos Milagres',
-      link: 'https://www.youtube.com/watch?v=chwyjJbcs1Y',
+      youtubeLink: 'https://www.youtube.com/watch?v=chwyjJbcs1Y',
     };
     jest.spyOn(recommendationRepository, 'selectRecommendation').mockImplementationOnce(() => true);
     jest.spyOn(recommendationRepository, 'updateScore').mockImplementationOnce(() => true);

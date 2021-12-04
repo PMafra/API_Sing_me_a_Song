@@ -20,7 +20,7 @@ const validateRecommendationBody = async (objectBody) => {
     });
 };
 
-const insertRecommendation = async ({ name, link }) => {
+const insertRecommendation = async ({ name, youtubeLink }) => {
   const isAlreadyRecommended = await recommendationRepository.selectRecommendation({ name });
 
   if (isAlreadyRecommended) {
@@ -28,7 +28,7 @@ const insertRecommendation = async ({ name, link }) => {
     return 'addedPoint';
   }
 
-  return recommendationRepository.insertRecommendation({ name, link });
+  return recommendationRepository.insertRecommendation({ name, youtubeLink });
 };
 
 const increaseScore = async ({ id }) => {
