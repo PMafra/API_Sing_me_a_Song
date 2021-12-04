@@ -28,7 +28,8 @@ const insertRecommendation = async ({ name, youtubeLink }) => {
     return 'addedPoint';
   }
 
-  return recommendationRepository.insertRecommendation({ name, youtubeLink });
+  await recommendationRepository.insertRecommendation({ name, youtubeLink });
+  return true;
 };
 
 const increaseScore = async ({ id }) => {

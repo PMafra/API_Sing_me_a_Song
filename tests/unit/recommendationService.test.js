@@ -16,4 +16,16 @@ describe('Recommendation service test', () => {
     const result = await sut.insertRecommendation(mockRecommendationBody);
     expect(result).toEqual('addedPoint');
   });
+
+  it('Should return true for new song recommendation', async () => {
+    const mockRecommendationBody = {
+      name: 'Falamansa - Xote dos Milagres',
+      youtubeLink: 'https://www.youtube.com/watch?v=chwyjJbcs1Y',
+    };
+    jest.spyOn(recommendationRepository, 'selectRecommendation').mockImplementationOnce(() => false);
+    jest.spyOn(recommendationRepository, 'insertRecommendation').mockImplementationOnce(() => true);
+
+    const result = await sut.insertRecommendation(mockRecommendationBody);
+    expect(result).toEqual(true);
+  });
 });
