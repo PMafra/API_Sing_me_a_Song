@@ -19,7 +19,7 @@ const validateRecommendationBody = async (objectBody) => {
 };
 
 const insertRecommendation = async ({ name, youtubeLink }) => {
-  const isAlreadyRecommended = await recommendationRepository.selectRecommendation({ name });
+  const isAlreadyRecommended = await recommendationRepository.selectQuery({ name });
 
   if (isAlreadyRecommended) {
     await recommendationRepository.updateScore({ id: isAlreadyRecommended.id, type: 'upvote' });
@@ -54,7 +54,7 @@ const decreaseScore = async ({ id }) => {
 const getRandomRecommendations = async () => {
   let filter;
   let notAllLessThan10;
-  const allRecommendations = await recommendationRepository.selectAll();
+  const allRecommendations = await recommendationRepository.selectQuery({});
   if (allRecommendations.length === 0) {
     throw new NotFoundError();
   }
@@ -74,12 +74,12 @@ const getRandomRecommendations = async () => {
     }
   }
 
-  const recommendations = await recommendationRepository.selectRandom({ filter });
+  const recommendations = await recommendationRepository.selectQuery({ filter });
   return recommendations;
 };
 
 const getTopRecommendations = async ({ amount }) => {
-  const topRecommendations = await recommendationRepository.selectTop({ amount });
+  const topRecommendations = await recommendationRepository.selectQuery({ amount });
 
   if (topRecommendations.length === 0) {
     throw new NotFoundError();

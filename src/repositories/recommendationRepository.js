@@ -1,7 +1,5 @@
 import connection from '../database/database.js';
 
-const selectString = 'SELECT * FROM "songs"';
-
 const selectQuery = async ({ name, amount, filter }) => {
   let baseSelectQuery = 'SELECT * FROM "songs"';
   const preparedValue = [];
@@ -30,47 +28,6 @@ const selectQuery = async ({ name, amount, filter }) => {
     return result.rows[0];
   }
   return result.rows;
-};
-
-const selectRandom = async ({ filter }) => {
-  let filterQuery = '';
-
-  if (filter === 70) {
-    filterQuery = ' WHERE score > 10';
-  }
-  if (filter === 30) {
-    filterQuery = ' WHERE score BETWEEN -5 AND 10';
-  }
-
-  const result = await connection.query(
-    `${selectString}${filterQuery} ORDER BY random() LIMIT 1;`,
-  );
-
-  return result.rows[0];
-};
-
-const selectTop = async ({ amount }) => {
-  const result = await connection.query(
-    `${selectString} ORDER BY score DESC LIMIT $1;`,
-    [amount],
-  );
-
-  return result.rows;
-};
-
-const selectAll = async () => {
-  const result = await connection.query(
-    `${selectString};`,
-  );
-  return result.rows;
-};
-
-const selectRecommendation = async ({ name }) => {
-  const result = await connection.query(
-    `${selectString} WHERE name ILIKE $1;`,
-    [name],
-  );
-  return result.rows[0];
 };
 
 const insertRecommendation = async ({ name, youtubeLink }) => {
@@ -107,11 +64,7 @@ const deleteRecommendation = async ({ id }) => {
 
 export {
   insertRecommendation,
-  selectRecommendation,
   updateScore,
   deleteRecommendation,
-  selectAll,
-  selectRandom,
-  selectTop,
   selectQuery,
 };
