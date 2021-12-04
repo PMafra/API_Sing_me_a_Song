@@ -4,21 +4,19 @@ import * as recommendationRepository from '../../../src/repositories/recommendat
 
 const sut = recommendationService;
 
-const mockRecommendationObject = recommendationFactory.createRecomendations(
+const mockRecommendationBody = recommendationFactory.createRecomendations(
   { length: null, score: null, isBody: true },
 );
+const mockRecommendation = recommendationFactory.createRecomendations({
+  length: 1, score: 1, isBody: false,
+});
 
 describe('Insert recommendation service tests', () => {
   it('Should return "addedPoint" when recommendation already exists', async () => {
-    jest.spyOn(recommendationRepository, 'selectRecommendation').mockImplementationOnce(() => ({
-      id: 15,
-      name: 'system',
-      youtubeLink: 'https://www.youtube.com/watch?v=chwyjJbcs1Y',
-      score: 4,
-    }));
+    jest.spyOn(recommendationRepository, 'selectRecommendation').mockImplementationOnce(() => mockRecommendation);
     jest.spyOn(recommendationRepository, 'updateScore').mockImplementationOnce(() => true);
 
-    const result = await sut.insertRecommendation(mockRecommendationObject);
+    const result = await sut.insertRecommendation(mockRecommendationBody);
     expect(result).toEqual('addedPoint');
   });
 
@@ -26,7 +24,7 @@ describe('Insert recommendation service tests', () => {
     jest.spyOn(recommendationRepository, 'selectRecommendation').mockImplementationOnce(() => undefined);
     jest.spyOn(recommendationRepository, 'insertRecommendation').mockImplementationOnce(() => true);
 
-    const result = await sut.insertRecommendation(mockRecommendationObject);
+    const result = await sut.insertRecommendation(mockRecommendationBody);
     expect(result).toBeTruthy();
   });
 });

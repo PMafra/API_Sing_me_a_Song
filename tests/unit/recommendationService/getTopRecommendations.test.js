@@ -4,8 +4,14 @@ import * as recommendationService from '../../../src/services/recommendationServ
 import NotFoundError from '../../../src/errors/notFoundError.js';
 import * as recommendationFactory from '../../factories/recommendationFactory.js';
 
-const sut = recommendationService;
 jest.mock('youtube-validate');
+const sut = recommendationService;
+const mockRecommendationsList = recommendationFactory.createRecomendations({
+  length: 3, score: null, isBody: false,
+});
+const mockAmount = {
+  amount: 3,
+};
 
 describe('Get top recommendations service tests', () => {
   it('Should return Not Found Error for no recommendations found', async () => {
@@ -16,12 +22,7 @@ describe('Get top recommendations service tests', () => {
   });
 
   it('Should return top recommendations list ordered by descending score points', async () => {
-    const mockAmount = {
-      amount: 3,
-    };
-    jest.spyOn(recommendationRepository, 'selectTop').mockImplementationOnce(() => (
-      recommendationFactory.createRecomendations({ length: 3, score: null, isBody: false })
-    ));
+    jest.spyOn(recommendationRepository, 'selectTop').mockImplementationOnce(() => mockRecommendationsList);
 
     const result = await sut.getTopRecommendations(mockAmount);
     expect(result).toHaveLength(mockAmount.amount);

@@ -4,22 +4,22 @@ import RequestError from '../../../src/errors/requestError.js';
 import * as recommendationFactory from '../../factories/recommendationFactory.js';
 import * as recommendationService from '../../../src/services/recommendationService.js';
 
-const sut = recommendationService;
 jest.mock('youtube-validate');
-
+const sut = recommendationService;
 const mockRecommendationObject = recommendationFactory.createRecomendations(
   { length: null, score: null, isBody: true },
 );
+const mockSchemaError = {
+  error: {
+    details: [{
+      message: 'error message',
+    }],
+  },
+};
 
 describe('Validate recommendation body service tests', () => {
   it('Should return Request Error for not valid body', async () => {
-    jest.spyOn(recommendationSchema, 'validate').mockImplementationOnce(() => ({
-      error: {
-        details: [{
-          message: 'error message',
-        }],
-      },
-    }));
+    jest.spyOn(recommendationSchema, 'validate').mockImplementationOnce(() => mockSchemaError);
 
     const promise = sut.validateRecommendationBody();
     await expect(promise).rejects.toThrowError(RequestError);

@@ -3,7 +3,6 @@ import * as recommendationRepository from '../../../src/repositories/recommendat
 import NotFoundError from '../../../src/errors/notFoundError.js';
 
 const sut = recommendationService;
-
 const mockVoteId = {
   id: 1,
 };
