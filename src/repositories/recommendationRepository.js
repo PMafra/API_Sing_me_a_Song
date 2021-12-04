@@ -1,28 +1,18 @@
+/* eslint-disable no-console */
 import connection from '../database/database.js';
+import filterHelper from '../helpers/filterHelper.js';
 
 const selectQuery = async ({ name, amount, filter }) => {
-  let baseSelectQuery = 'SELECT * FROM "songs"';
-  const preparedValue = [];
+  console.log(name);
+  const baseQuery = 'SELECT * FROM "songs"';
+  const {
+    finalQuery,
+    preparedValue,
+  } = filterHelper({
+    baseQuery, name, amount, filter,
+  });
 
-  if (name) {
-    baseSelectQuery += ' WHERE name ILIKE $1;';
-    preparedValue.push(name);
-  }
-  if (amount) {
-    baseSelectQuery += ' ORDER BY score DESC LIMIT $1;';
-    preparedValue.push(amount);
-  }
-  if (filter) {
-    if (filter === 70) {
-      baseSelectQuery += ' WHERE score > 10';
-    }
-    if (filter === 30) {
-      baseSelectQuery += ' WHERE score BETWEEN -5 AND 10';
-    }
-    baseSelectQuery += ' ORDER BY random() DESC LIMIT 1;';
-  }
-
-  const result = await connection.query(`${baseSelectQuery};`, preparedValue);
+  const result = await connection.query(`${finalQuery};`, preparedValue);
 
   if (name || filter) {
     return result.rows[0];
