@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import * as recommendationRepository from '../../../src/repositories/recommendationRepository.js';
 import * as recommendationService from '../../../src/services/recommendationService.js';
 import NotFoundError from '../../../src/errors/notFoundError.js';

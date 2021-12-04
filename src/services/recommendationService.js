@@ -1,7 +1,3 @@
-/* eslint-disable consistent-return */
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
-/* eslint-disable import/prefer-default-export */
 import { validateUrl } from 'youtube-validate';
 import * as recommendationRepository from '../repositories/recommendationRepository.js';
 import recommendationSchema from '../validations/recommendationSchema.js';

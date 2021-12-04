@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import connection from '../database/database.js';
 
 const selectString = 'SELECT * FROM "songs"';

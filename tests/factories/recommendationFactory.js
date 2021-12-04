@@ -1,6 +1,4 @@
 /* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable no-plusplus */
-/* eslint-disable import/prefer-default-export */
 import faker from 'faker';
 
 const createRecomendations = ({ length, score, isBody }) => {

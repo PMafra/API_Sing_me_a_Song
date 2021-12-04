@@ -1,4 +1,3 @@
-/* eslint-disable no-useless-escape */
 import Joi from 'joi';
 
 const recommendationSchema = Joi.object().length(2).keys({
