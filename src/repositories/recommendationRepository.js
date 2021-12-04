@@ -2,10 +2,33 @@ import connection from '../database/database.js';
 
 const selectString = 'SELECT * FROM "songs"';
 
-const selectAll = async () => {
-  const result = await connection.query(
-    `${selectString};`,
-  );
+const selectQuery = async ({ name, amount, filter }) => {
+  let baseSelectQuery = 'SELECT * FROM "songs"';
+  const preparedValue = [];
+
+  if (name) {
+    baseSelectQuery += ' WHERE name ILIKE $1;';
+    preparedValue.push(name);
+  }
+  if (amount) {
+    baseSelectQuery += ' ORDER BY score DESC LIMIT $1;';
+    preparedValue.push(amount);
+  }
+  if (filter) {
+    if (filter === 70) {
+      baseSelectQuery += ' WHERE score > 10';
+    }
+    if (filter === 30) {
+      baseSelectQuery += ' WHERE score BETWEEN -5 AND 10';
+    }
+    baseSelectQuery += ' ORDER BY random() DESC LIMIT 1;';
+  }
+
+  const result = await connection.query(`${baseSelectQuery};`, preparedValue);
+
+  if (name || filter) {
+    return result.rows[0];
+  }
   return result.rows;
 };
 
@@ -32,6 +55,13 @@ const selectTop = async ({ amount }) => {
     [amount],
   );
 
+  return result.rows;
+};
+
+const selectAll = async () => {
+  const result = await connection.query(
+    `${selectString};`,
+  );
   return result.rows;
 };
 
@@ -83,4 +113,5 @@ export {
   selectAll,
   selectRandom,
   selectTop,
+  selectQuery,
 };
