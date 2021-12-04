@@ -81,8 +81,6 @@ const getRandomRecommendations = async () => {
 };
 
 const getTopRecommendations = async ({ amount }) => {
-  console.log('result');
-
   const topRecommendations = await recommendationRepository.selectTop({ amount });
 
   if (topRecommendations.length === 0) {

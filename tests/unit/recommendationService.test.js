@@ -84,4 +84,71 @@ describe('Recommendation service test', () => {
     const result = await sut.decreaseScore(mockUpvoteId);
     expect(result).toEqual(true);
   });
+
+  it('Should return Not Found Error for no recommendations found', async () => {
+    jest.spyOn(recommendationRepository, 'selectAll').mockImplementationOnce(() => []);
+
+    const promise = sut.getRandomRecommendations();
+    await expect(promise).rejects.toThrowError(NotFoundError);
+  });
+
+  it('Should return recommendation with score > 10', async () => {
+    jest.spyOn(recommendationRepository, 'selectAll').mockImplementationOnce(() => ['filled']);
+    jest.spyOn(recommendationRepository, 'selectRandom').mockImplementationOnce(() => (
+      {
+        id: 13,
+        name: 'alok',
+        youtubeLink: 'https://www.youtube.com/watch?v=chwyjJbcs1Y',
+        score: 13,
+      }
+    ));
+
+    const result = await sut.getRandomRecommendations();
+    expect(result).toEqual({
+      id: 13,
+      name: 'alok',
+      youtubeLink: 'https://www.youtube.com/watch?v=chwyjJbcs1Y',
+      score: 13,
+    });
+  });
+
+  it('Should return recommendation with score between -5 and 10', async () => {
+    jest.spyOn(recommendationRepository, 'selectAll').mockImplementationOnce(() => ['filled']);
+    jest.spyOn(recommendationRepository, 'selectRandom').mockImplementationOnce(() => (
+      {
+        id: 13,
+        name: 'alok',
+        youtubeLink: 'https://www.youtube.com/watch?v=chwyjJbcs1Y',
+        score: 5,
+      }
+    ));
+
+    const result = await sut.getRandomRecommendations();
+    expect(result).toEqual({
+      id: 13,
+      name: 'alok',
+      youtubeLink: 'https://www.youtube.com/watch?v=chwyjJbcs1Y',
+      score: 5,
+    });
+  });
+
+  it('Should return any recommendation', async () => {
+    jest.spyOn(recommendationRepository, 'selectAll').mockImplementationOnce(() => ['filled']);
+    jest.spyOn(recommendationRepository, 'selectRandom').mockImplementationOnce(() => (
+      {
+        id: 13,
+        name: 'alok',
+        youtubeLink: 'https://www.youtube.com/watch?v=chwyjJbcs1Y',
+        score: 5,
+      }
+    ));
+
+    const result = await sut.getRandomRecommendations();
+    expect(result).toEqual({
+      id: 13,
+      name: 'alok',
+      youtubeLink: 'https://www.youtube.com/watch?v=chwyjJbcs1Y',
+      score: 5,
+    });
+  });
 });
