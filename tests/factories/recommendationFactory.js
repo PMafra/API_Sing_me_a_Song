@@ -1,23 +1,21 @@
 /* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable no-plusplus */
-/* eslint-disable import/prefer-default-export */
 import faker from 'faker';
 
 const createRecomendations = ({ length, score, isBody }) => {
+  const youtubeLink = 'https://www.youtube.com/watch?';
+  const baseObject = {
+    name: `${faker.name.findName()} - ${faker.name.findName()}`,
+    youtubeLink,
+  };
+
   if (isBody) {
-    return {
-      name: `${faker.name.findName()} - ${faker.name.findName()}`,
-      youtubeLink: 'https://www.youtube.com/watch?',
-    };
+    return baseObject;
   }
 
   if (score && length === 1) {
-    return {
-      id: 1,
-      name: `${faker.name.findName()} - ${faker.name.findName()}`,
-      youtubeLink: 'https://www.youtube.com/watch?',
-      score,
-    };
+    baseObject.id = 1;
+    baseObject.score = score;
+    return baseObject;
   }
 
   const recommendationList = [];
@@ -25,7 +23,7 @@ const createRecomendations = ({ length, score, isBody }) => {
     recommendationList.push({
       id: i,
       name: `${faker.name.findName()} - ${faker.name.findName()}`,
-      youtubeLink: 'https://www.youtube.com/watch?',
+      youtubeLink,
       score: length * 2 - i,
     });
   }

@@ -1,6 +1,4 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
-/* eslint-disable import/prefer-default-export */
 import * as recommendationService from '../services/recommendationService.js';
 import RequestError from '../errors/requestError.js';
 import NotFoundError from '../errors/notFoundError.js';

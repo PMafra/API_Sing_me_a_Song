@@ -1,7 +1,3 @@
-/* eslint-disable consistent-return */
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
-/* eslint-disable import/prefer-default-export */
 import { validateUrl } from 'youtube-validate';
 import * as recommendationRepository from '../repositories/recommendationRepository.js';
 import recommendationSchema from '../validations/recommendationSchema.js';
@@ -24,7 +20,7 @@ const validateRecommendationBody = async (objectBody) => {
 
 const insertRecommendation = async ({ name, youtubeLink }) => {
   const isAlreadyRecommended = await recommendationRepository.selectRecommendation({ name });
-  console.log(isAlreadyRecommended);
+
   if (isAlreadyRecommended) {
     await recommendationRepository.updateScore({ id: isAlreadyRecommended.id, type: 'upvote' });
     return 'addedPoint';
