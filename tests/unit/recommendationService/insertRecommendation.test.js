@@ -13,7 +13,6 @@ const mockRecommendation = recommendationFactory.createRecomendations({
 const mockSelect = jest.spyOn(recommendationRepository, 'selectQuery');
 const mockUpdate = jest.spyOn(recommendationRepository, 'updateScore');
 const mockInsert = jest.spyOn(recommendationRepository, 'insertRecommendation');
-
 const mockRecommendationRepository = {
   selectQuery: {
     undefined: () => mockSelect.mockImplementationOnce(() => undefined),

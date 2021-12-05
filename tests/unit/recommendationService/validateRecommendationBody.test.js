@@ -16,28 +16,36 @@ const mockSchemaError = {
     }],
   },
 };
+const mockNoError = {
+  error: false,
+};
+const mockValidate = jest.spyOn(recommendationSchema, 'validate');
+const mockRecommendationRepository = {
+  validate: {
+    schemaError: () => mockValidate.mockImplementationOnce(() => mockSchemaError),
+    noError: () => mockValidate.mockImplementationOnce(() => mockNoError),
+  },
+};
 
 describe('Validate recommendation body service tests', () => {
   it('Should return Request Error for not valid body', async () => {
-    jest.spyOn(recommendationSchema, 'validate').mockImplementationOnce(() => mockSchemaError);
+    mockRecommendationRepository.validate.schemaError();
 
     const promise = sut.validateRecommendationBody();
     await expect(promise).rejects.toThrowError(RequestError);
   });
 
   it('Should return Request Error for not valid url', async () => {
-    jest.spyOn(recommendationSchema, 'validate').mockImplementationOnce(() => ({
-      error: false,
-    }));
+    mockRecommendationRepository.validate.noError();
+
     validateUrl.mockRejectedValue(() => 'err');
     const promise = sut.validateRecommendationBody(mockRecommendationObject);
     await expect(promise).rejects.toThrowError(RequestError);
   });
 
   it('Should return true for valid body', async () => {
-    jest.spyOn(recommendationSchema, 'validate').mockImplementationOnce(() => ({
-      error: false,
-    }));
+    mockRecommendationRepository.validate.noError();
+
     validateUrl.mockResolvedValue(() => true);
     const result = await sut.validateRecommendationBody(mockRecommendationObject);
     expect(result).toBeTruthy();

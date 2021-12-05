@@ -6,19 +6,38 @@ const sut = recommendationService;
 const mockVoteId = {
   id: 1,
 };
+const mockLowScore = {
+  score: -6,
+};
+const mockScore = {
+  score: -1,
+};
+const mockUpdate = jest.spyOn(recommendationRepository, 'updateScore');
+const mockDelete = jest.spyOn(recommendationRepository, 'deleteRecommendation');
+const mockRecommendationRepository = {
+  updateScore: {
+    true: () => mockUpdate.mockImplementationOnce(() => true),
+    undefined: () => mockUpdate.mockImplementationOnce(() => undefined),
+    minScore: () => mockUpdate.mockImplementationOnce(() => mockLowScore),
+    anyScore: () => mockUpdate.mockImplementationOnce(() => mockScore),
+  },
+  deleteRecommendation: {
+    true: () => mockDelete.mockImplementationOnce(() => true),
+  },
+};
 
 describe('Increase and decrease score services tests', () => {
   // INCREASE SCORE
 
   it('Should return Not Found Error for not existant song id', async () => {
-    jest.spyOn(recommendationRepository, 'updateScore').mockImplementationOnce(() => undefined);
+    mockRecommendationRepository.updateScore.undefined();
 
     const promise = sut.increaseScore(mockVoteId);
     await expect(promise).rejects.toThrowError(NotFoundError);
   });
 
   it('Should return true for sucess increasing song recommendation score', async () => {
-    jest.spyOn(recommendationRepository, 'updateScore').mockImplementationOnce(() => true);
+    mockRecommendationRepository.updateScore.true();
 
     const result = await sut.increaseScore(mockVoteId);
     expect(result).toBeTruthy();
@@ -27,26 +46,22 @@ describe('Increase and decrease score services tests', () => {
   // DECREASE SCORE
 
   it('Should return Not Found Error for not existant song id', async () => {
-    jest.spyOn(recommendationRepository, 'updateScore').mockImplementationOnce(() => undefined);
+    mockRecommendationRepository.updateScore.undefined();
 
     const promise = sut.decreaseScore(mockVoteId);
     await expect(promise).rejects.toThrowError(NotFoundError);
   });
 
   it('Should delete song recommendation when decreased score is less than -5 points', async () => {
-    jest.spyOn(recommendationRepository, 'updateScore').mockImplementationOnce(() => (
-      { score: -6 }
-    ));
-    jest.spyOn(recommendationRepository, 'deleteRecommendation').mockImplementationOnce(() => true);
+    mockRecommendationRepository.updateScore.minScore();
+    mockRecommendationRepository.deleteRecommendation.true();
 
     const result = await sut.decreaseScore(mockVoteId);
     expect(result).toEqual('deleted');
   });
 
   it('Should return true for sucess decreasing song recommendation score', async () => {
-    jest.spyOn(recommendationRepository, 'updateScore').mockImplementationOnce(() => (
-      { score: -1 }
-    ));
+    mockRecommendationRepository.updateScore.anyScore();
 
     const result = await sut.decreaseScore(mockVoteId);
     expect(result).toBeTruthy();
