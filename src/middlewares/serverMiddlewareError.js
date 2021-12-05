@@ -1,7 +1,9 @@
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
+import { logger } from '../../utils/logger.js';
+
 const serverMiddlewareError = async (err, req, res, next) => {
-  console.log(err);
+  logger.error(err);
   res.sendStatus(500);
 };
 
