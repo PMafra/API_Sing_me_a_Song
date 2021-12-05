@@ -1,7 +1,5 @@
 /* eslint-disable no-unused-vars */
 import * as recommendationService from '../services/recommendationService.js';
-import RequestError from '../errors/requestError.js';
-import NotFoundError from '../errors/notFoundError.js';
 
 const addNewRecommendation = async (req, res, next) => {
   try {
@@ -16,9 +14,6 @@ const addNewRecommendation = async (req, res, next) => {
     }
     return res.sendStatus(201);
   } catch (err) {
-    if (err instanceof RequestError) {
-      return res.status(400).send(err.message);
-    }
     return next(err);
   }
 };
@@ -35,9 +30,6 @@ const upvoteRecommendation = async (req, res, next) => {
 
     return res.sendStatus(201);
   } catch (err) {
-    if (err instanceof NotFoundError) {
-      return res.sendStatus(404);
-    }
     return next(err);
   }
 };
@@ -58,9 +50,6 @@ const downvoteRecommendation = async (req, res, next) => {
 
     return res.sendStatus(201);
   } catch (err) {
-    if (err instanceof NotFoundError) {
-      return res.sendStatus(404);
-    }
     return next(err);
   }
 };
@@ -71,9 +60,6 @@ const obtainRandomRecommendations = async (req, res, next) => {
 
     return res.send(randomRecommendations);
   } catch (err) {
-    if (err instanceof NotFoundError) {
-      return res.sendStatus(404);
-    }
     return next(err);
   }
 };
@@ -90,9 +76,6 @@ const obtainTopRecommendations = async (req, res, next) => {
 
     return res.send(topRecommendations);
   } catch (err) {
-    if (err instanceof NotFoundError) {
-      return res.sendStatus(404);
-    }
     return next(err);
   }
 };
