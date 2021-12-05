@@ -5,12 +5,12 @@ const filterHelper = ({
   const preparedValue = [];
 
   if (name) {
-    finalQuery += ' WHERE name ILIKE $1';
     preparedValue.push(name);
+    finalQuery += ` WHERE name ILIKE $${preparedValue.length}`;
   }
   if (amount) {
-    finalQuery += ' ORDER BY score DESC LIMIT $1';
     preparedValue.push(amount);
+    finalQuery += ` ORDER BY score DESC LIMIT $${preparedValue.length}`;
   }
   if (randomness) {
     if (randomness === 70) {
