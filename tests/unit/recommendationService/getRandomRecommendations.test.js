@@ -10,19 +10,28 @@ const mockLowScoreRecommendation = recommendationFactory.createRecomendations({
 const mockHighScoreRecommendation = recommendationFactory.createRecomendations({
   length: 1, score: 13, isBody: false,
 });
+const mockSelect = jest.spyOn(recommendationRepository, 'selectQuery');
+const mockRecommendationRepository = {
+  selectQuery: {
+    empty: () => mockSelect.mockImplementationOnce(() => []),
+    filled: () => mockSelect.mockImplementationOnce(() => ['filled']),
+    highScore: () => mockSelect.mockImplementationOnce(() => mockHighScoreRecommendation),
+    lowScore: () => mockSelect.mockImplementationOnce(() => mockLowScoreRecommendation),
+  },
+};
 
 describe('Get random recommendations service tests', () => {
   it('Should return Not Found Error for no recommendations found', async () => {
-    jest.spyOn(recommendationRepository, 'selectQuery').mockImplementationOnce(() => []);
+    mockRecommendationRepository.selectQuery.empty();
 
     const promise = sut.getRandomRecommendations();
     await expect(promise).rejects.toThrowError(NotFoundError);
   });
 
   it('Should return recommendation with score > 10', async () => {
-    jest.spyOn(recommendationRepository, 'selectQuery').mockImplementationOnce(() => ['filled']);
+    mockRecommendationRepository.selectQuery.filled();
     jest.spyOn(Math, 'random').mockReturnValueOnce(() => 0.6);
-    jest.spyOn(recommendationRepository, 'selectQuery').mockImplementationOnce(() => mockHighScoreRecommendation);
+    mockRecommendationRepository.selectQuery.highScore();
 
     const result = await sut.getRandomRecommendations();
     expect(result).toEqual(
@@ -37,9 +46,9 @@ describe('Get random recommendations service tests', () => {
   });
 
   it('Should return recommendation with score between -5 and 10', async () => {
-    jest.spyOn(recommendationRepository, 'selectQuery').mockImplementationOnce(() => ['filled']);
+    mockRecommendationRepository.selectQuery.filled();
     jest.spyOn(Math, 'random').mockReturnValueOnce(() => 0.8);
-    jest.spyOn(recommendationRepository, 'selectQuery').mockImplementationOnce(() => mockLowScoreRecommendation);
+    mockRecommendationRepository.selectQuery.lowScore();
 
     const result = await sut.getRandomRecommendations();
     expect(result).toEqual(
@@ -55,8 +64,8 @@ describe('Get random recommendations service tests', () => {
   });
 
   it('Should return any recommendation', async () => {
-    jest.spyOn(recommendationRepository, 'selectQuery').mockImplementationOnce(() => ['filled']);
-    jest.spyOn(recommendationRepository, 'selectQuery').mockImplementationOnce(() => mockLowScoreRecommendation);
+    mockRecommendationRepository.selectQuery.filled();
+    mockRecommendationRepository.selectQuery.lowScore();
 
     const result = await sut.getRandomRecommendations();
     expect(result).toEqual(
