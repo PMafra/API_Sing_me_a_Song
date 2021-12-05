@@ -3,8 +3,8 @@
 import { logger } from '../../utils/logger.js';
 
 const serverMiddlewareError = async (err, req, res, next) => {
-  logger.error(err);
   res.sendStatus(500);
+  logger.error(`method: ${req.method} - url: ${req.originalUrl} - status: ${res.statusCode} - message: ${err.message} - ip: ${req.ip}`);
 };
 
 export default serverMiddlewareError;
