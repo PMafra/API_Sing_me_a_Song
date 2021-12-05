@@ -18,7 +18,7 @@ if (process.env.NODE_ENV === 'production') {
     password: process.env.DB_PASS,
     host: process.env.DB_HOST,
     port: parseInt(process.env.DB_PORT),
-    // database: process.env.DB_DATABASE,
+    database: process.env.DB_DATABASE,
   };
 }
 
