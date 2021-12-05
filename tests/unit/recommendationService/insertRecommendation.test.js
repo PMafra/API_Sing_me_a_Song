@@ -13,7 +13,7 @@ const mockRecommendation = recommendationFactory.createRecomendations({
 
 describe('Insert recommendation service tests', () => {
   it('Should return "addedPoint" when recommendation already exists', async () => {
-    jest.spyOn(recommendationRepository, 'selectRecommendation').mockImplementationOnce(() => mockRecommendation);
+    jest.spyOn(recommendationRepository, 'selectQuery').mockImplementationOnce(() => mockRecommendation);
     jest.spyOn(recommendationRepository, 'updateScore').mockImplementationOnce(() => true);
 
     const result = await sut.insertRecommendation(mockRecommendationBody);
@@ -21,7 +21,7 @@ describe('Insert recommendation service tests', () => {
   });
 
   it('Should return true for new song recommendation', async () => {
-    jest.spyOn(recommendationRepository, 'selectRecommendation').mockImplementationOnce(() => undefined);
+    jest.spyOn(recommendationRepository, 'selectQuery').mockImplementationOnce(() => undefined);
     jest.spyOn(recommendationRepository, 'insertRecommendation').mockImplementationOnce(() => true);
 
     const result = await sut.insertRecommendation(mockRecommendationBody);

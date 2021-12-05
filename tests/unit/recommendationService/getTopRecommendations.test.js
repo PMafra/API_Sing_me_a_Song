@@ -14,14 +14,14 @@ const mockAmount = {
 
 describe('Get top recommendations service tests', () => {
   it('Should return Not Found Error for no recommendations found', async () => {
-    jest.spyOn(recommendationRepository, 'selectTop').mockImplementationOnce(() => []);
+    jest.spyOn(recommendationRepository, 'selectQuery').mockImplementationOnce(() => []);
 
     const promise = sut.getTopRecommendations({ amount: 1 });
     await expect(promise).rejects.toThrowError(NotFoundError);
   });
 
   it('Should return top recommendations list ordered by descending score points', async () => {
-    jest.spyOn(recommendationRepository, 'selectTop').mockImplementationOnce(() => mockRecommendationsList);
+    jest.spyOn(recommendationRepository, 'selectQuery').mockImplementationOnce(() => mockRecommendationsList);
 
     const result = await sut.getTopRecommendations(mockAmount);
     expect(result).toHaveLength(mockAmount.amount);
