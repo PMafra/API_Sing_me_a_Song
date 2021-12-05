@@ -1,8 +1,8 @@
 import { validateUrl } from 'youtube-validate';
-import recommendationSchema from '../../../src/validations/recommendationSchema.js';
 import RequestError from '../../../src/errors/requestError.js';
 import * as recommendationFactory from '../../factories/recommendationFactory.js';
 import * as recommendationService from '../../../src/services/recommendationService.js';
+import { mockRecommendationRepository } from '../../factories/mockFactory.js';
 
 jest.mock('youtube-validate');
 const sut = recommendationService;
@@ -19,24 +19,17 @@ const mockSchemaError = {
 const mockNoError = {
   error: false,
 };
-const mockValidate = jest.spyOn(recommendationSchema, 'validate');
-const mockRecommendationRepository = {
-  validate: {
-    schemaError: () => mockValidate.mockImplementationOnce(() => mockSchemaError),
-    noError: () => mockValidate.mockImplementationOnce(() => mockNoError),
-  },
-};
 
 describe('Validate recommendation body service tests', () => {
   it('Should return Request Error for not valid body', async () => {
-    mockRecommendationRepository.validate.schemaError();
+    mockRecommendationRepository.validate(mockSchemaError);
 
     const promise = sut.validateRecommendationBody();
     await expect(promise).rejects.toThrowError(RequestError);
   });
 
   it('Should return Request Error for not valid url', async () => {
-    mockRecommendationRepository.validate.noError();
+    mockRecommendationRepository.validate(mockNoError);
 
     validateUrl.mockRejectedValue(() => 'err');
     const promise = sut.validateRecommendationBody(mockRecommendationObject);
@@ -44,7 +37,7 @@ describe('Validate recommendation body service tests', () => {
   });
 
   it('Should return true for valid body', async () => {
-    mockRecommendationRepository.validate.noError();
+    mockRecommendationRepository.validate(mockNoError);
 
     validateUrl.mockResolvedValue(() => true);
     const result = await sut.validateRecommendationBody(mockRecommendationObject);
