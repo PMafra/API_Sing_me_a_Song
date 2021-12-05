@@ -1,6 +1,6 @@
 import * as recommendationFactory from '../../factories/recommendationFactory.js';
 import * as recommendationService from '../../../src/services/recommendationService.js';
-import * as recommendationRepository from '../../../src/repositories/recommendationRepository.js';
+import { mockRecommendationRepository } from '../../factories/mockFactory.js';
 
 const sut = recommendationService;
 
@@ -13,16 +13,16 @@ const mockRecommendation = recommendationFactory.createRecomendations({
 
 describe('Insert recommendation service tests', () => {
   it('Should return "addedPoint" when recommendation already exists', async () => {
-    jest.spyOn(recommendationRepository, 'selectQuery').mockImplementationOnce(() => mockRecommendation);
-    jest.spyOn(recommendationRepository, 'updateScore').mockImplementationOnce(() => true);
+    mockRecommendationRepository.selectQuery(mockRecommendation);
+    mockRecommendationRepository.updateScore(true);
 
     const result = await sut.insertRecommendation(mockRecommendationBody);
     expect(result).toEqual('addedPoint');
   });
 
   it('Should return true for new song recommendation', async () => {
-    jest.spyOn(recommendationRepository, 'selectQuery').mockImplementationOnce(() => undefined);
-    jest.spyOn(recommendationRepository, 'insertRecommendation').mockImplementationOnce(() => true);
+    mockRecommendationRepository.selectQuery(undefined);
+    mockRecommendationRepository.insertRecommendation(true);
 
     const result = await sut.insertRecommendation(mockRecommendationBody);
     expect(result).toBeTruthy();

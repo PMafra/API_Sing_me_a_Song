@@ -1,7 +1,7 @@
-import * as recommendationRepository from '../../../src/repositories/recommendationRepository.js';
 import * as recommendationService from '../../../src/services/recommendationService.js';
 import NotFoundError from '../../../src/errors/notFoundError.js';
 import * as recommendationFactory from '../../factories/recommendationFactory.js';
+import { mockRecommendationRepository } from '../../factories/mockFactory.js';
 
 jest.mock('youtube-validate');
 const sut = recommendationService;
@@ -14,14 +14,14 @@ const mockAmount = {
 
 describe('Get top recommendations service tests', () => {
   it('Should return Not Found Error for no recommendations found', async () => {
-    jest.spyOn(recommendationRepository, 'selectQuery').mockImplementationOnce(() => []);
+    mockRecommendationRepository.selectQuery([]);
 
     const promise = sut.getTopRecommendations({ amount: 1 });
     await expect(promise).rejects.toThrowError(NotFoundError);
   });
 
   it('Should return top recommendations list ordered by descending score points', async () => {
-    jest.spyOn(recommendationRepository, 'selectQuery').mockImplementationOnce(() => mockRecommendationsList);
+    mockRecommendationRepository.selectQuery(mockRecommendationsList);
 
     const result = await sut.getTopRecommendations(mockAmount);
     expect(result).toHaveLength(mockAmount.amount);
