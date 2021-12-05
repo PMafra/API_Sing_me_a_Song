@@ -52,7 +52,7 @@ const decreaseScore = async ({ id }) => {
 };
 
 const getRandomRecommendations = async () => {
-  let filter;
+  let randomness;
   let notAllLessThan10;
   const allRecommendations = await recommendationRepository.selectQuery({});
   if (allRecommendations.length === 0) {
@@ -67,14 +67,14 @@ const getRandomRecommendations = async () => {
   if (notAllLessThan10) {
     const randomNumber = Math.random();
     if (randomNumber < 0.7) {
-      filter = 70;
+      randomness = 70;
     }
     if (randomNumber >= 0.7) {
-      filter = 30;
+      randomness = 30;
     }
   }
 
-  const recommendations = await recommendationRepository.selectQuery({ filter });
+  const recommendations = await recommendationRepository.selectQuery({ randomness });
   return recommendations;
 };
 

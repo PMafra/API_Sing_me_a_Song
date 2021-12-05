@@ -1,20 +1,18 @@
-/* eslint-disable no-console */
 import connection from '../database/database.js';
 import filterHelper from '../helpers/filterHelper.js';
 
-const selectQuery = async ({ name, amount, filter }) => {
-  console.log(name);
+const selectQuery = async ({ name, amount, randomness }) => {
   const baseQuery = 'SELECT * FROM "songs"';
   const {
     finalQuery,
     preparedValue,
   } = filterHelper({
-    baseQuery, name, amount, filter,
+    baseQuery, name, amount, randomness,
   });
 
   const result = await connection.query(`${finalQuery};`, preparedValue);
 
-  if (name || filter) {
+  if (name || randomness) {
     return result.rows[0];
   }
   return result.rows;
