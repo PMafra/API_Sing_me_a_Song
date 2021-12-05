@@ -1,5 +1,5 @@
 import connection from '../database/database.js';
-import filterHelper from '../helpers/filterHelper.js';
+import filterHelper from '../helpers/repositoryHelpers/filterHelper.js';
 
 const selectQuery = async ({ name, amount, randomness }) => {
   const baseQuery = 'SELECT * FROM "songs"';
