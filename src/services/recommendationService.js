@@ -9,7 +9,13 @@ const validateRecommendationBody = async (objectBody) => {
   if (isCorrectBody.error) {
     throw new RequestError(isCorrectBody.error.details[0].message);
   }
-
+  const isValidNameString = objectBody.name.split(' - ');
+  if (isValidNameString.length !== 2) {
+    throw new RequestError('Recommendation name malformed');
+  }
+  if (isValidNameString[0].length === 0 || isValidNameString[1].length === 0) {
+    throw new RequestError('Missing song or singer name');
+  }
   await validateUrl(objectBody.youtubeLink)
     .then(() => true).catch((err) => {
       throw new RequestError(err);
@@ -19,14 +25,19 @@ const validateRecommendationBody = async (objectBody) => {
 };
 
 const insertRecommendation = async ({ name, youtubeLink }) => {
-  const isAlreadyRecommended = await recommendationRepository.selectQuery({ name });
+  const removingBlanck = name.split('-');
+  const removeFirst = removingBlanck[0].trim();
+  const removeSecond = removingBlanck[1].trim();
+  const newName = `${removeFirst} - ${removeSecond}`;
+
+  const isAlreadyRecommended = await recommendationRepository.selectQuery({ name: newName });
 
   if (isAlreadyRecommended) {
     await recommendationRepository.updateScore({ id: isAlreadyRecommended.id, type: 'upvote' });
     return 'addedPoint';
   }
 
-  await recommendationRepository.insertRecommendation({ name, youtubeLink });
+  await recommendationRepository.insertRecommendation({ name: newName, youtubeLink });
   return true;
 };
 
