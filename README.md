@@ -44,18 +44,16 @@ Main thechnologies used in the construction of the project:<br>
 </p>
 
 Some frameworks and concepts:
-<p>
-* winston </br>
-* Joi </br>
-* Clean code and code standard - eslint, prettier and husky </br>
-* Dev, test and production environments - dotenv </br>
+<img align="right" width="50%" src="https://user-images.githubusercontent.com/84607762/144898252-6a1404fd-a03f-4924-9757-f556565eb7c6.png" />
+<p align="left">
+* <a href="https://github.com/winstonjs/winston">winston</a> </br>
+* <a href="https://github.com/sideway/joi">Joi</a>  </br>
+* Clean code and code standard - <a href="https://eslint.org/">eslint</a>, <a href="https://prettier.io/">prettier</a> and <a href="https://github.com/typicode/husky">husky</a> </br>
+* Dev, test and production environments - <a href="https://github.com/motdotla/dotenv">dotenv</a> </br>
 * Unit tests </br>
-* Layered backend architecture: </br>
-
-![image](https://user-images.githubusercontent.com/84607762/144894965-bcd07d0d-fec4-4985-93dd-a0e16086b929.png)
-
-
+* Layered backend architecture </br>
 </p>
+
 
 ## How to run
 
